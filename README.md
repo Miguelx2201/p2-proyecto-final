@@ -32,31 +32,48 @@ Reglas de Negocio: Políticas de cancelación, precios base por zona y servicios
 
 — ¿Cómo se distribuyen las funcionalidades?
 
-•Funcionalidades para el Usuario
+•Funcionalidades para el Usuario:
+
 -Registro / Login: Esta responsabilidad recae en GestorSesion (que maneja la lista de usuarios y el usuarioActual) apoyándose en la clase Usuario.
+
 -Explorar y filtrar eventos: Se gestiona a través de la clase Evento, que contiene los atributos de nombre, categoria y ciudad para aplicar los filtros.
+
 -Seleccionar zona / asiento: Se realiza mediante la navegación de Recinto ->Zona  -> Asiento. La lógica de selección se vincula a estas entidades.
+
 -Comprar entradas: La clase principal es Compra, pero la interacción simplificada se realiza a través de CompraFacade (método iniciarCompra).
+
 -Gestionar compras (Crear / Modificar / Cancelar): Se delega en CompraFacade (métodos confirmarPago y cancelarCompra) y el estado interno cambia mediante las implementaciones de IEstadoCompra.
+
 -Agregar servicios VIP: Se utiliza el patrón Decorator. La funcionalidad reside en EntradaDecorator y sus hijos: SeguroDec, ParqueaderoDec y MerchandasingDec.
 -Historial de compras: Aunque no hay una clase "Historial", la lógica de recuperación de datos perteneceríade compra hacia usuario.
+
 -Descargar reportes CSV / PDF: Se gestiona mediante la interfaz IGeneradorReporte y sus adaptadores POIAdapter (Excel/CSV) y PDFBoxAdapter (PDF).
 •Funcionalidades para el Administrador
 -CRUD usuarios: Se especifica directamente en la clase GestorSesion con el método +CRUD usuarios....
+
 -CRUD eventos, recintos, zonas y asientos: Estas operaciones de administración suelen gestionarse en clases controladoras o servicios vinculados directamente a las entidades Evento, Recinto, Zona y Asiento.
+
 -Control de disponibilidad: Se verifica en la clase Evento (el estadoEvento no puede ser “cancelado” ), Asiento (atributo estado: EstadoAsiento) y en Zona (atributo capacidad).
+
 -Gestión de compras (Administrativa): Se centraliza en CompraFacade para supervisar los flujos de todas las transacciones.
+
 -Registro de incidencias: Se asigna a la clase Incidencia y su interfaz IIncidencia, que permite reportar problemas sobre entidades afectadas.
+
 -Panel de métricas (JavaFX / Charts): El diagrama no muestra clases de UI, pero la lógica de obtención de datos para estas métricas provendría de IGeneradorReporte procesando la información de Compra y Evento.
+
 -Reportes operativos (Ventas, ocupación, etc.): Al igual que los reportes de usuario, se resuelven mediante el patrón Adapter con IGeneradorReporte, POIService y PDFBoxService, extrayendo la data de las colecciones de compras y zonas.
 
 — ¿Qué debo hacer para probar las funcionalidades?
 
 Inicializar datos de prueba que cubran todos los escenarios:
 • Al menos 2 usuarios (1 admin, 1 usuario normal) con métodos de pago
+
 • Al menos 2 eventos en distintos estados (Publicado, Pausado, Cancelado)
+
 • 1 recinto con zonas VIP/Preferencial/General y asientos numerados
+
 • Compras en cada estado (Creada, Pagada, Confirmada, Cancelada, Reembolsada)
+
 • Incidencias registradas para validar el panel admin 
 
 — ¿Qué puedo reutilizar? (patrones elegidos)
