@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public class GestorSesion implements Serializable {
-    private static final long serialVersionUID = 1L;
     private static GestorSesion instance;
 
     private Usuario usuarioActual;
@@ -16,25 +15,6 @@ public class GestorSesion implements Serializable {
         return instance;
     }
 
-    protected Object readResolve() { return getInstance(); }
-
-    // Login
-    public boolean iniciarSesion(String correo, String password, BaseDatos bd) {
-        Usuario encontrado = bd.getUsuarios().stream()
-                .filter(u -> u.getCorreo().equals(correo))
-                .findFirst()
-                .orElse(null);
-
-        if (encontrado != null) {
-            this.usuarioActual = encontrado;
-            return true;
-        }
-        return false;
-    }
-
-    public void cerrarSesion() {
-        this.usuarioActual = null;
-    }
-
+    //Falta metodo iniciar sesion y cerrarsesion
     public Usuario getUsuarioActual() { return usuarioActual; }
 }
