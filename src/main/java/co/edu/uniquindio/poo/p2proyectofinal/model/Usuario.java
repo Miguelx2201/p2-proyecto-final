@@ -2,6 +2,8 @@ package co.edu.uniquindio.poo.p2proyectofinal.model;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -13,6 +15,7 @@ public class Usuario {
     private String nombre;
     private String correo;
     private String telefono;
+    private String contraseña;
     private RolUsuario rol;
     private List<IMetodoPago> metodosPago;
     private List<Compra> compras;
