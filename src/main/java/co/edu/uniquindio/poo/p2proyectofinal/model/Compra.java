@@ -3,6 +3,7 @@ package co.edu.uniquindio.poo.p2proyectofinal.model;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter

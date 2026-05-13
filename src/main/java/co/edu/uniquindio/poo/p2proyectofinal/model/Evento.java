@@ -15,7 +15,7 @@ import java.util.List;
 public class Evento {
     private String idEvento;
     private String nombre;
-    private Categoria categoria;
+    private String categoria;
     private LocalDateTime fechaHora;
     private EstadoEvento estadoEvento;
     private String descripcion;

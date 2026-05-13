@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntradaBase implements IEntrada{
+public abstract class EntradaBase implements IEntrada{
     private String idEntrada;
     private Zona zona;
     private Asiento asiento;
