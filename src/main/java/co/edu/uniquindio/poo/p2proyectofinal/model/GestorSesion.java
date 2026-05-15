@@ -10,9 +10,11 @@ public class GestorSesion{
 
     private Usuario usuarioActual;
     private Map<String,Usuario> usuarios;
+    private List<INotificacionObserver> observers;
 
     private GestorSesion() {
         usuarios = new HashMap<>();
+        observers = new ArrayList<>();
         //Falta aqui poner un metodo para cargar los metodos de prueba.
     }
 
