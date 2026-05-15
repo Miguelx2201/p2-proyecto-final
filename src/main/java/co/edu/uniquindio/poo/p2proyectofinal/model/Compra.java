@@ -3,15 +3,15 @@ package co.edu.uniquindio.poo.p2proyectofinal.model;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 @Builder
 public class Compra {
+    private static int numCompras=0;
     private String idCompra;
     private LocalDate fechaCreacion;
     private double total;
@@ -19,4 +19,19 @@ public class Compra {
     private Usuario usuario;
     private Evento evento;
     private List<IEntrada> entradas;
+
+    public Compra(LocalDate fechaCreacion, IEstadoCompra estado, Usuario usuario, Evento evento, List<IEntrada> entradas) {
+        //Aqui se intenta simular una llave primaria como en una base de datos, se intenta que cumpla con
+        // las caracteristicas de llave primaria, es decir, autoincrementable y no nula.
+        this.idCompra = String.valueOf(++numCompras);
+        this.fechaCreacion = fechaCreacion;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.evento = evento;
+        this.entradas = entradas;
+        this.total = calcularTotalCompra();
+    }
+    private double calcularTotalCompra(){
+        return entradas.stream().mapToDouble(IEntrada::getPrecioFinal).sum();
+    }
 }
