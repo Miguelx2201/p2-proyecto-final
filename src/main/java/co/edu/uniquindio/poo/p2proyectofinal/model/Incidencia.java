@@ -8,11 +8,19 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class Incidencia {
+    private static int numIncidencias = 0;
     private String idIncidencia;
-    private TipoIncidencia tipoIncidencia;
+    private String tipoIncidencia;
     private String descripcion;
     private LocalDate fecha;
+
+    public Incidencia(String tipoIncidencia, String descripcion, LocalDate fecha) {
+        //Aqui se intenta simular una llave primaria como en una base de datos, se intenta que cumpla con
+        // las caracteristicas de llave primaria, es decir, autoincrementable y no nula.
+        this.idIncidencia = String.valueOf(++numIncidencias);
+        this.tipoIncidencia = tipoIncidencia;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+    }
 }
