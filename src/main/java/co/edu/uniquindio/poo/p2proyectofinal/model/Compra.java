@@ -20,12 +20,12 @@ public class Compra {
     private Evento evento;
     private List<IEntrada> entradas;
 
-    public Compra(LocalDate fechaCreacion, IEstadoCompra estado, Usuario usuario, Evento evento, List<IEntrada> entradas) {
+    public Compra(LocalDate fechaCreacion, Usuario usuario, Evento evento, List<IEntrada> entradas) {
         //Aqui se intenta simular una llave primaria como en una base de datos, se intenta que cumpla con
         // las caracteristicas de llave primaria, es decir, autoincrementable y no nula.
         this.idCompra = String.valueOf(++numCompras);
         this.fechaCreacion = fechaCreacion;
-        this.estado = estado;
+        this.estado = new CompraCreadaState();
         this.usuario = usuario;
         this.evento = evento;
         this.entradas = entradas;
@@ -33,5 +33,11 @@ public class Compra {
     }
     private double calcularTotalCompra(){
         return entradas.stream().mapToDouble(IEntrada::getPrecioFinal).sum();
+    }
+    public void pagar() throws ProyectoException{
+        estado.pagar(this);
+    }
+    public void cancelar() throws ProyectoException{
+        estado.cancelar(this);
     }
 }
