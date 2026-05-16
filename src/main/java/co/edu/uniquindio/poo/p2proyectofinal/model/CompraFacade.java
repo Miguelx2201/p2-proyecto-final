@@ -37,7 +37,6 @@ public class CompraFacade {
         }
 
         Compra nuevaCompra = Compra.builder()
-                .idCompra("COMP-" + System.currentTimeMillis())
                 .fechaCreacion(LocalDate.now())
                 .total(totalAcumulado)
                 .estado(new CompraCreadaState())
@@ -68,6 +67,6 @@ public class CompraFacade {
     }
 
     private void notificar(Compra compra) {
-        new EmailObserver().notificar("Realizó una compra por el valor de:"+compra.getTotal()+" para el evento: "+compra.getEvento().getNombre());
+        GestorEventos.getInstance().notificarObservers("Se ha realizado una nueva compra: "+compra.getIdCompra());
     }
 }
