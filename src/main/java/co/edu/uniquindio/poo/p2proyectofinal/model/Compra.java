@@ -18,6 +18,7 @@ public class Compra {
     private IEstadoCompra estado;
     private Usuario usuario;
     private Evento evento;
+    private IMetodoPago metodoPago;
     private List<IEntrada> entradas;
 
     public Compra(LocalDate fechaCreacion, Usuario usuario, Evento evento, List<IEntrada> entradas) {
@@ -29,6 +30,7 @@ public class Compra {
         this.usuario = usuario;
         this.evento = evento;
         this.entradas = entradas;
+        this.metodoPago=metodoPago;
         this.total = calcularTotalCompra();
     }
     private double calcularTotalCompra(){
