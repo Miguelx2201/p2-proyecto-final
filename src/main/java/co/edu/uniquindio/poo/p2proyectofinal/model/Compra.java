@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class Compra {
     private static int numCompras=0;
-    private String idCompra;
+    private final String idCompra;
     private LocalDate fechaCreacion;
     private double total;
     private IEstadoCompra estado;

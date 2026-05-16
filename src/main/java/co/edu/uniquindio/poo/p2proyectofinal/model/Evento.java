@@ -11,10 +11,9 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @ToString
-@NoArgsConstructor
 public class Evento {
     private static int numEventos=0;
-    private String idEvento;
+    private final String idEvento;
     private String nombre;
     private String categoria;
     private LocalDateTime fechaHora;

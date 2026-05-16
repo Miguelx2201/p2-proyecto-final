@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @ToString
 public class Incidencia {
     private static int numIncidencias = 0;
-    private String idIncidencia;
+    private final String idIncidencia;
     private String tipoIncidencia;
     private String descripcion;
     private LocalDate fecha;

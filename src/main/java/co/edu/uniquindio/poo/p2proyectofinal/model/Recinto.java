@@ -10,7 +10,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class Recinto {
     private static int numRecintos=0;
-    private String idRecinto;
+    private final String idRecinto;
     private String nombre;
     private String direccion;
     private String ciudad;

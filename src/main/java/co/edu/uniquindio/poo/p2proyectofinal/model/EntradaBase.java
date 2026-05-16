@@ -6,10 +6,9 @@ import lombok.*;
 @Getter
 @EqualsAndHashCode
 @ToString
-@NoArgsConstructor
 public abstract class EntradaBase implements IEntrada{
     private static int numEntradas=0;
-    private String idEntrada;
+    private final String idEntrada;
     private Zona zona;
     private Asiento asiento;
     private EstadoEntrada estadoEntrada;

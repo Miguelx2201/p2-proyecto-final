@@ -5,12 +5,10 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 public class Asiento {
     private static int numAsientos=0;
-    private String idAsiento;
+    private final String idAsiento;
     private String fila;
     private int numero;
     private EstadoAsiento estado;

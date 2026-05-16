@@ -10,7 +10,7 @@ import java.util.List;
 @ToString
 public class Usuario {
     private static int numUsuarios=0;
-    private String idUsuario;
+    private final String idUsuario;
     private String nombre;
     private String correo;
     private String telefono;
