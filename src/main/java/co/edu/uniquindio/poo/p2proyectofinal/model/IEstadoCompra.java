@@ -1,6 +1,7 @@
 package co.edu.uniquindio.poo.p2proyectofinal.model;
 //State pattern.
 public interface IEstadoCompra {
-    void pagar(IMetodoPago metodoPago) throws ProyectoException;
-    void cancelar()throws ProyectoException;
+    void pagar(Compra compra) throws ProyectoException;
+    void cancelar(Compra compra)throws ProyectoException;
+    String getNombreEstado();
 }
