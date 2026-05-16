@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class Asiento {
     private static int numAsientos=0;

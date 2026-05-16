@@ -6,4 +6,9 @@ public abstract class EntradaDecorator implements IEntrada{
     public EntradaDecorator(IEntrada entrada) {
         this.entrada = entrada;
     }
+
+    @Override
+    public double getPrecioBase() {
+        return entrada.getPrecioBase();
+    }
 }

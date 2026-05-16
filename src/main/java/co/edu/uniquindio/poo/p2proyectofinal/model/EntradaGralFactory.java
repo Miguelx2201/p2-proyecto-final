@@ -1,8 +1,9 @@
 package co.edu.uniquindio.poo.p2proyectofinal.model;
 
-public class EntrVipFactory implements IEntradaFactory {
+public class EntradaGralFactory implements EntradaFactory {
+
     @Override
     public IEntrada createEntrada(Zona zona, Asiento asiento, EstadoEntrada estadoEntrada, String descripcion, double precio) {
-        return new EntradaVip(zona,asiento,estadoEntrada,descripcion,precio);
+        return new EntradaGral(zona,asiento,estadoEntrada,descripcion,precio);
     }
 }
