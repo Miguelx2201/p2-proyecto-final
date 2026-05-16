@@ -46,4 +46,9 @@ public abstract class EntradaBase implements IEntrada{
     public double getPrecioBase(){
         return this.precio;
     }
+
+    @Override
+    public Asiento getAsiento() {
+        return this.asiento;
+    }
 }

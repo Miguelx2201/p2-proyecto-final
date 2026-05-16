@@ -11,4 +11,9 @@ public abstract class EntradaDecorator implements IEntrada{
     public double getPrecioBase() {
         return entrada.getPrecioBase();
     }
+
+    @Override
+    public Asiento getAsiento() {
+        return entrada.getAsiento(); // Delega al objeto envuelto
+    }
 }

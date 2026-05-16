@@ -5,4 +5,5 @@ public interface IEntrada {
     double getPrecioFinal();
     String getDescripcion();
     EstadoEntrada getEstado();
+    Asiento getAsiento();
 }
