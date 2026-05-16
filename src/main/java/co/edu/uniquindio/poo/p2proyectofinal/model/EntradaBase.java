@@ -41,4 +41,9 @@ public abstract class EntradaBase implements IEntrada{
     public EstadoEntrada getEstado() {
         return estadoEntrada;
     }
+
+    @Override
+    public double getPrecioBase(){
+        return this.precio;
+    }
 }
