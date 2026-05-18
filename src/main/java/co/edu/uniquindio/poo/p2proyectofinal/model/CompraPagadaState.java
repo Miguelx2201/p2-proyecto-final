@@ -8,8 +8,8 @@ public class CompraPagadaState implements IEstadoCompra {
 
     @Override
     public void cancelar(Compra compra) throws ProyectoException {
-        System.out.println("La compra ha sido cancelada.");
-        System.out.println("Si desea el reembolso debe comunicarse con el administrador.");
+        compra.setEstado(new CompraReembolsadaState()); // transición
+        System.out.println("Compra cancelada. Reembolso registrado.");
     }
 
     @Override
