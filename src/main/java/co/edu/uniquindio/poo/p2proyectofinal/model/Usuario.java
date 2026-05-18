@@ -2,7 +2,9 @@ package co.edu.uniquindio.poo.p2proyectofinal.model;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -29,5 +31,29 @@ public class Usuario {
         this.contraseña = contraseña;
         this.rol = rol;
         this.metodosPago = metodosPago;
+    }
+    public void agregarMetodoPago(IMetodoPago metodoPago) throws ProyectoException {
+        if (metodoPago == null) throw new ProyectoException("El método de pago no puede ser nulo.");
+        boolean yaExiste = buscarMetodoPagoPorNombre(metodoPago.getNombre()).isPresent();
+        if (yaExiste) throw new ProyectoException("Ya existe un método de pago con ese nombre.");
+        metodosPago.add(metodoPago);
+    }
+    public void actualizarMetodoPago(IMetodoPago metodoPago) throws ProyectoException {
+        IMetodoPago encontrado = buscarMetodoPagoPorNombre(metodoPago.getNombre())
+                .orElseThrow(() -> new ProyectoException("Método de pago no encontrado."));
+        metodosPago.set(metodosPago.indexOf(encontrado), metodoPago);
+    }
+    public void eliminarMetodoPago(String nombre) throws ProyectoException {
+        IMetodoPago encontrado = buscarMetodoPagoPorNombre(nombre)
+                .orElseThrow(() -> new ProyectoException("Método de pago no encontrado."));
+        metodosPago.remove(encontrado);
+    }
+    public List<IMetodoPago> listarMetodosPago() {
+        return new ArrayList<>(metodosPago);
+    }
+    private Optional<IMetodoPago> buscarMetodoPagoPorNombre(String nombre) {
+        return metodosPago.stream()
+                .filter(m -> m.getNombre().equalsIgnoreCase(nombre))
+                .findFirst();
     }
 }
