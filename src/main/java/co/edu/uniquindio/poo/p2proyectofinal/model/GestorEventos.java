@@ -40,19 +40,61 @@ public class GestorEventos {
                         .toLowerCase()
                         .contains(texto.toLowerCase()))
                 .findFirst();
-    }
+    } //para la interfaz
     public List<Evento> buscarEventosPorNombre(String texto) {
         return eventos.stream().filter(e -> e.getNombre()
                 .toLowerCase()
                 .contains(texto.toLowerCase()))
                 .collect(Collectors.toList());
-    }
+    }  //para la interfaz
     public void añadirEvento(Evento evento) throws ProyectoException {
         if(evento == null) throw new ProyectoException("No es posible añadir un evento nulo.");
         Optional<Evento> encontrado = buscarEventoPorNombre(evento.getNombre());
         if(encontrado.isPresent()) throw new ProyectoException("El evento ya ha sido añadido.");
         eventos.add(evento);
         notificarObservers("¡Nuevo evento disponible! : "+evento.getNombre()); // Observers
+    }
+    public void actualizarEvento(Evento evento) throws ProyectoException {
+        Evento encontrado = buscarEventoPorId(evento.getIdEvento())
+                .orElseThrow(() -> new ProyectoException("No se puede actualizar: el evento no existe."));
+        eventos.set(eventos.indexOf(encontrado), evento);
+    }
+    public void eliminarEvento(String idEvento) throws ProyectoException {
+        Evento encontrado = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("No se puede eliminar: el evento no existe."));
+        eventos.remove(encontrado);
+    }
+    public List<Evento> listarEventos() {
+        return new ArrayList<>(eventos);
+    }
+    public void publicarEvento(String idEvento) throws ProyectoException {
+        Evento encontrado = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        if (encontrado.getEstadoEvento() == EstadoEvento.CANCELADO)
+            throw new ProyectoException("No se puede publicar un evento cancelado.");
+        encontrado.setEstadoEvento(EstadoEvento.PUBLICADO);
+        notificarObservers("¡El evento " + encontrado.getNombre() + " ha sido publicado!");
+    }
+    public void pausarEvento(String idEvento) throws ProyectoException {
+        Evento encontrado = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        if (encontrado.getEstadoEvento() != EstadoEvento.PUBLICADO)
+            throw new ProyectoException("Solo se puede pausar un evento publicado.");
+        encontrado.setEstadoEvento(EstadoEvento.PAUSADO);
+        notificarObservers("El evento " + encontrado.getNombre() + " ha sido pausado.");
+    }
+    public void cancelarEvento(String idEvento) throws ProyectoException {
+        Evento encontrado = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        if (encontrado.getEstadoEvento() == EstadoEvento.FINALIZADO)
+            throw new ProyectoException("No se puede cancelar un evento finalizado.");
+        encontrado.setEstadoEvento(EstadoEvento.CANCELADO);
+        notificarObservers("El evento " + encontrado.getNombre() + " ha sido cancelado.");
+    }
+    private Optional<Evento> buscarEventoPorId(String idEvento) { //mas rapido
+        return eventos.stream()
+                .filter(e -> e.getIdEvento().equals(idEvento))
+                .findFirst();
     }
     //Compra. (aqui pueden faltar modificaciones para manejo del estado de la compra, etc.
     public void realizarCompra(Compra compra) throws ProyectoException {
