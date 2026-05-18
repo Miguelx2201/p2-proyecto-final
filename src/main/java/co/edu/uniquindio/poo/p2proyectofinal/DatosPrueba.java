@@ -95,7 +95,7 @@ public class DatosPrueba {
         compra1.setUsuario(cliente1);
         compra1.setEvento(concierto);
         facade.confirmarPago(compra1, new TarjetaPago("4111111111111111", "123"));
-        gestor.registrarCompra(compra1);
+        gestor.realizarCompra(compra1);
 
         sesion.cerrarSesion();
 
