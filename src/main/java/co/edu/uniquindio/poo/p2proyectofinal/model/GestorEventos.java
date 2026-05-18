@@ -165,7 +165,47 @@ public class GestorEventos {
                 .filter(z -> z.getIdZona().equals(idZona))
                 .findFirst();
     }
-
+    private Zona obtenerZona(String idEvento, String idZona) throws ProyectoException {
+        Evento evento = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        return evento.getRecinto().getZonas().stream()
+                .filter(z -> z.getIdZona().equals(idZona))
+                .findFirst()
+                .orElseThrow(() -> new ProyectoException("Zona no encontrada."));
+    }
+    public void agregarAsiento(String idEvento, String idZona, Asiento asiento) throws ProyectoException {
+        Zona zona = obtenerZona(idEvento, idZona);
+        boolean yaExiste = buscarAsientoPorId(zona, asiento.getIdAsiento()).isPresent();
+        if (yaExiste) throw new ProyectoException("Ya existe un asiento con ese ID en la zona.");
+        zona.getAsientos().add(asiento);
+    }
+    public void actualizarAsiento(String idEvento, String idZona, Asiento asiento) throws ProyectoException {
+        Zona zona = obtenerZona(idEvento, idZona);
+        Asiento encontrado = buscarAsientoPorId(zona, asiento.getIdAsiento())
+                .orElseThrow(() -> new ProyectoException("Asiento no encontrado."));
+        zona.getAsientos().set(zona.getAsientos().indexOf(encontrado), asiento);
+    }
+    public void eliminarAsiento(String idEvento, String idZona, String idAsiento) throws ProyectoException {
+        Zona zona = obtenerZona(idEvento, idZona);
+        Asiento encontrado = buscarAsientoPorId(zona, idAsiento)
+                .orElseThrow(() -> new ProyectoException("Asiento no encontrado."));
+        zona.getAsientos().remove(encontrado);
+    }
+    public void cambiarEstadoAsiento(String idEvento, String idZona, String idAsiento, EstadoAsiento nuevoEstado) throws ProyectoException {
+        Zona zona = obtenerZona(idEvento, idZona);
+        Asiento encontrado = buscarAsientoPorId(zona, idAsiento)
+                .orElseThrow(() -> new ProyectoException("Asiento no encontrado."));
+        encontrado.setEstado(nuevoEstado);
+    }
+    public List<Asiento> listarAsientos(String idEvento, String idZona) throws ProyectoException {
+        Zona zona = obtenerZona(idEvento, idZona);
+        return new ArrayList<>(zona.getAsientos());
+    }
+    private Optional<Asiento> buscarAsientoPorId(Zona zona, String idAsiento) {
+        return zona.getAsientos().stream()
+                .filter(a -> a.getIdAsiento().equals(idAsiento))
+                .findFirst();
+    }
     public void registrarCompra(Compra compra) throws ProyectoException {
         if (compra == null) throw new ProyectoException("La compra no puede ser nula.");
         compras.add(compra);
