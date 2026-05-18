@@ -24,19 +24,21 @@ public class Evento implements IIncidencia{
     private List<Compra> compras;
     private Recinto recinto;
 
-    public Evento(Recinto recinto, String politicas, String ciudad, String descripcion, EstadoEvento estadoEvento, LocalDateTime fechaHora, String categoria, String nombre) {
-        //Aqui se intenta simular una llave primaria como en una base de datos, se intenta que cumpla con
-        // las caracteristicas de llave primaria, es decir, autoincrementable y no nula.
+    // Constructor privado — solo lo usa el Builder
+    @Builder
+    private Evento(String nombre, String categoria, LocalDateTime fechaHora,
+                   EstadoEvento estadoEvento, String descripcion, String ciudad,
+                   String politicas, Recinto recinto) {
         this.idEvento = String.valueOf(++numEventos);
         this.compras = new ArrayList<>();
-        this.recinto = recinto;
-        this.politicas = politicas;
-        this.ciudad = ciudad;
-        this.descripcion = descripcion;
-        this.estadoEvento = estadoEvento;
-        this.fechaHora = fechaHora;
-        this.categoria = categoria;
         this.nombre = nombre;
+        this.categoria = categoria;
+        this.fechaHora = fechaHora;
+        this.estadoEvento = estadoEvento;
+        this.descripcion = descripcion;
+        this.ciudad = ciudad;
+        this.politicas = politicas;
+        this.recinto = recinto;
     }
 
     @Override

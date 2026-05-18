@@ -53,32 +53,38 @@ public class DatosPrueba {
         gestor.agregarRecinto(estadio);
 
         // ─── EVENTOS ─────────────────────────────────────────────
-        Evento concierto = new Evento(estadio,
-                "No hay reembolsos después de 48h",
-                "Armenia",
-                "El mejor concierto del año",
-                EstadoEvento.PUBLICADO,
-                LocalDateTime.of(2026, 8, 15, 20, 0),
-                "Concierto",
-                "Concierto Juanes");
+        Evento concierto = Evento.builder()
+                .nombre("Concierto Juanes")
+                .categoria("Concierto")
+                .ciudad("Armenia")
+                .descripcion("El mejor concierto del año")
+                .estadoEvento(EstadoEvento.PUBLICADO)
+                .fechaHora(LocalDateTime.of(2026, 8, 15, 20, 0))
+                .politicas("No hay reembolsos después de 48h")
+                .recinto(estadio)
+                .build();
 
-        Evento teatro = new Evento(estadio,
-                "Reembolso hasta 24h antes",
-                "Bogotá",
-                "Obra de teatro clásica",
-                EstadoEvento.PUBLICADO,
-                LocalDateTime.of(2026, 9, 10, 19, 0),
-                "Teatro",
-                "Romeo y Julieta");
+        Evento teatro = Evento.builder()
+                .nombre("Romeo y Julieta")
+                .categoria("Teatro")
+                .ciudad("Bogotá")
+                .descripcion("Obra de teatro clásica")
+                .estadoEvento(EstadoEvento.PUBLICADO)
+                .fechaHora(LocalDateTime.of(2026, 9, 10, 19, 0))
+                .politicas("Reembolso hasta 24h antes")
+                .recinto(estadio)
+                .build();
 
-        Evento conferencia = new Evento(estadio,
-                "Sin reembolsos",
-                "Medellín",
-                "Conferencia de tecnología e innovación",
-                EstadoEvento.BORRADOR,
-                LocalDateTime.of(2026, 10, 5, 9, 0),
-                "Conferencia",
-                "TechConf 2026");
+        Evento conferencia = Evento.builder()
+                .nombre("TechConf 2026")
+                .categoria("Conferencia")
+                .ciudad("Medellín")
+                .descripcion("Conferencia de tecnología e innovación")
+                .estadoEvento(EstadoEvento.BORRADOR)
+                .fechaHora(LocalDateTime.of(2026, 10, 5, 9, 0))
+                .politicas("Sin reembolsos")
+                .recinto(estadio)
+                .build();
 
         gestor.añadirEvento(concierto);
         gestor.añadirEvento(teatro);
