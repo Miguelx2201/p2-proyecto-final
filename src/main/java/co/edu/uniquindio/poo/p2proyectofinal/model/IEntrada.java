@@ -6,4 +6,5 @@ public interface IEntrada {
     String getDescripcion();
     EstadoEntrada getEstado();
     Asiento getAsiento();
+    void setAsiento(Asiento asiento);
 }

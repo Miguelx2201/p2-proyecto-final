@@ -165,16 +165,40 @@ public class GestorEventos {
                 .filter(z -> z.getIdZona().equals(idZona))
                 .findFirst();
     }
-    //Compra. (aqui pueden faltar modificaciones para manejo del estado de la compra, etc.
-    public void realizarCompra(Compra compra) throws ProyectoException {
-        Usuario usuarioActual = GestorSesion.getInstance().getUsuarioActual();
-        if(usuarioActual == null) {
-            throw new ProyectoException("Inicia sesion antes de realizar una compra!");
-        }
-        //Aqui iria la logica de compra.
-        //bla bla bla
 
-        notificarObservers("¡Nueva compra realizada para el evento "+compra.getEvento().getNombre()+"!");
+    public void registrarCompra(Compra compra) throws ProyectoException {
+        if (compra == null) throw new ProyectoException("La compra no puede ser nula.");
+        compras.add(compra);
+        compra.getUsuario().getCompras().add(compra);
+        notificarObservers("Nueva compra registrada para el evento: " + compra.getEvento().getNombre());
+    }
+    public void modificarCompra(String idCompra, List<IEntrada> nuevasEntradas) throws ProyectoException {
+        Compra encontrada = buscarCompraPorId(idCompra)
+                .orElseThrow(() -> new ProyectoException("Compra no encontrada."));
+        if (!(encontrada.getEstado() instanceof CompraCreadaState))
+            throw new ProyectoException("Solo se puede modificar una compra en estado Creada.");
+        encontrada.setEntradas(nuevasEntradas);
+    }
+    public void cancelarCompra(String idCompra) throws ProyectoException {
+        Compra encontrada = buscarCompraPorId(idCompra)
+                .orElseThrow(() -> new ProyectoException("Compra no encontrada."));
+        encontrada.cancelar();
+        notificarObservers("Compra " + idCompra + " cancelada por el usuario: " + encontrada.getUsuario().getNombre());
+    }
+    public void reasignarAsiento(String idCompra, IEntrada entrada, Asiento nuevoAsiento) throws ProyectoException {
+        Compra encontrada = buscarCompraPorId(idCompra)
+                .orElseThrow(() -> new ProyectoException("Compra no encontrada."));
+        if (encontrada.getEstado() instanceof CompraCanceladaState)
+            throw new ProyectoException("No se puede reasignar en una compra cancelada.");
+        entrada.getAsiento().setEstado(EstadoAsiento.DISPONIBLE); // liberar asiento anterior
+        nuevoAsiento.setEstado(EstadoAsiento.VENDIDO);            // ocupar nuevo asiento
+        entrada.setAsiento(nuevoAsiento);
+        notificarObservers("Asiento reasignado en compra: " + idCompra);
+    }
+    private Optional<Compra> buscarCompraPorId(String idCompra) {
+        return compras.stream()
+                .filter(c -> c.getIdCompra().equals(idCompra))
+                .findFirst();
     }
 
     private List<Evento> filtrarEventosPublicados() {
