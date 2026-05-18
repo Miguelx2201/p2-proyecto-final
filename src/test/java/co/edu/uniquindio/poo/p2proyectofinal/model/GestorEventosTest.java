@@ -108,6 +108,59 @@ class GestorEventosTest {
         assertEquals(100.0, zonaVip.calcularPorcentajeOcupacion());
     }
 
+    // ─── FILTROS ──────────────────────────────────────────────
+
+    @Test
+    void filtrarEventos_noBorrador_noDeberiaAparecer() throws ProyectoException {
+        gestor.añadirEvento(crearEvento("Evento Borrador", EstadoEvento.BORRADOR));
+        List<Evento> resultado = gestor.filtrarEventos(null, null, null, null, null);
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void filtrarHistorial_porEstado_deberiaRetornarSoloCorrespondientes() throws ProyectoException {
+        Compra compra = prepararCompraEnSistema();
+        compra.setEstado(new CompraPagadaState());
+        List<Compra> resultado = gestor.filtrarHistorialCompras(null, null, null, new CompraPagadaState());
+        assertEquals(1, resultado.size());
+    }
+
+// ─── USUARIO ──────────────────────────────────────────────
+
+    @Test
+    void agregarMetodoPago_duplicado_deberiaLanzarExcepcion() throws ProyectoException {
+        Usuario cliente = new Usuario("Juan", "juan@test.com", "300",
+                "pass", RolUsuario.CLIENTE, new ArrayList<>());
+        cliente.agregarMetodoPago(new EfectivoPago());
+        assertThrows(ProyectoException.class, () -> cliente.agregarMetodoPago(new EfectivoPago()));
+    }
+
+// ─── ESTADOS DE COMPRA ────────────────────────────────────
+
+    @Test
+    void pagarCompra_yaConfirmada_deberiaLanzarExcepcion() throws ProyectoException {
+        Compra compra = prepararCompraEnSistema();
+        compra.setEstado(new CompraConfirmadaState());
+        assertThrows(ProyectoException.class, () -> compra.pagar());
+    }
+
+    @Test
+    void cancelarCompra_yaReembolsada_deberiaLanzarExcepcion() throws ProyectoException {
+        Compra compra = prepararCompraEnSistema();
+        compra.setEstado(new CompraReembolsadaState());
+        assertThrows(ProyectoException.class, () -> compra.cancelar());
+    }
+
+// ─── SESION ───────────────────────────────────────────────
+
+    @Test
+    void iniciarSesion_contrasenaIncorrecta_deberiaLanzarExcepcion() throws ProyectoException {
+        Usuario cliente = new Usuario("Juan", "juan@test.com", "300",
+                "pass", RolUsuario.CLIENTE, new ArrayList<>());
+        GestorSesion.getInstance().registrarUsuario(cliente);
+        assertThrows(ProyectoException.class,
+                () -> GestorSesion.getInstance().iniciarSesion(cliente.getIdUsuario(), "incorrecta"));
+    }
     // ─── AUXILIARES ───────────────────────────────────────────
 
     private Evento crearEvento(String nombre, EstadoEvento estado) {
