@@ -123,6 +123,38 @@ public class GestorEventos {
                 .filter(r -> r.getIdRecinto().equals(idRecinto))
                 .findFirst();
     }
+    public void agregarZona(String idEvento, Zona zona) throws ProyectoException {
+        Evento evento = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        boolean yaExiste = buscarZonaPorId(evento.getRecinto(), zona.getNombre()).isPresent();
+        if (yaExiste) throw new ProyectoException("Ya existe una zona con ese nombre en el recinto.");
+        evento.getRecinto().getZonas().add(zona);
+    }
+    public void actualizarZona(String idEvento, Zona zona) throws ProyectoException {
+        Evento evento = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        List<Zona> zonas = evento.getRecinto().getZonas();
+        Zona encontrada = buscarZonaPorId(evento.getRecinto(), zona.getIdZona())
+                .orElseThrow(() -> new ProyectoException("Zona no encontrada."));
+        zonas.set(zonas.indexOf(encontrada), zona);
+    }
+    public void eliminarZona(String idEvento, String idZona) throws ProyectoException {
+        Evento evento = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        Zona encontrada = buscarZonaPorId(evento.getRecinto(), idZona)
+                .orElseThrow(() -> new ProyectoException("Zona no encontrada."));
+        evento.getRecinto().getZonas().remove(encontrada);
+    }
+    public List<Zona> listarZonas(String idEvento) throws ProyectoException {
+        Evento evento = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+        return new ArrayList<>(evento.getRecinto().getZonas());
+    }
+    private Optional<Zona> buscarZonaPorId(Recinto recinto, String idZona) {
+        return recinto.getZonas().stream()
+                .filter(z -> z.getIdZona().equals(idZona))
+                .findFirst();
+    }
     //Compra. (aqui pueden faltar modificaciones para manejo del estado de la compra, etc.
     public void realizarCompra(Compra compra) throws ProyectoException {
         Usuario usuarioActual = GestorSesion.getInstance().getUsuarioActual();
