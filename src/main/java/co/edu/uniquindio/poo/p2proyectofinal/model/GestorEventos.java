@@ -208,11 +208,17 @@ public class GestorEventos {
                 .filter(a -> a.getIdAsiento().equals(idAsiento))
                 .findFirst();
     }
-    public void registrarCompra(Compra compra) throws ProyectoException {
-        if (compra == null) throw new ProyectoException("La compra no puede ser nula.");
+    public void realizarCompra(Compra compra) throws ProyectoException {
+        Usuario usuarioActual = GestorSesion.getInstance().getUsuarioActual();
+        if (usuarioActual == null)
+            throw new ProyectoException("Inicia sesión antes de realizar una compra.");
+        if (compra == null)
+            throw new ProyectoException("La compra no puede ser nula.");
+        compra.setUsuario(usuarioActual);
+        compra.setEstado(new CompraCreadaState());
         compras.add(compra);
-        compra.getUsuario().getCompras().add(compra);
-        notificarObservers("Nueva compra registrada para el evento: " + compra.getEvento().getNombre());
+        usuarioActual.getCompras().add(compra);
+        notificarObservers("¡Nueva compra realizada para el evento: " + compra.getEvento().getNombre() + "!");
     }
     public void modificarCompra(String idCompra, List<IEntrada> nuevasEntradas) throws ProyectoException {
         Compra encontrada = buscarCompraPorId(idCompra)
