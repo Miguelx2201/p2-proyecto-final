@@ -2,9 +2,7 @@ package co.edu.uniquindio.poo.p2proyectofinal.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.*;
 @Setter
@@ -92,6 +90,22 @@ public class GestorEventos {
             throw new ProyectoException("No se puede cancelar un evento finalizado.");
         encontrado.setEstadoEvento(EstadoEvento.CANCELADO);
         notificarObservers("El evento " + encontrado.getNombre() + " ha sido cancelado.");
+    }
+    public Map<String, Double> consultarDisponibilidadPorZonas(String idEvento) throws ProyectoException {
+        Evento evento = buscarEventoPorId(idEvento)
+                .orElseThrow(() -> new ProyectoException("Evento no encontrado."));
+
+        Map<String, Double> disponibilidad = new LinkedHashMap<>();
+
+        for (Zona zona : evento.getRecinto().getZonas()) {
+            long asientosOcupados = zona.getAsientos().stream()
+                    .filter(a -> a.getEstado() != EstadoAsiento.DISPONIBLE)
+                    .count();
+            double porcentajeOcupacion = (asientosOcupados * 100.0) / zona.getCapacidad();
+            disponibilidad.put(zona.getNombre(), porcentajeOcupacion);
+        }
+
+        return disponibilidad;
     }
     private Optional<Evento> buscarEventoPorId(String idEvento) { //mas rapido
         return eventos.stream()
