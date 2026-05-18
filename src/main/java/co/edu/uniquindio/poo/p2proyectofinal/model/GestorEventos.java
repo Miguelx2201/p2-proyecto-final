@@ -13,12 +13,14 @@ public class GestorEventos {
     private List<Evento> eventos;
     private List<Compra> compras;
     private List<Recinto> recintos;
+    private List<Incidencia> incidencias;
     private List<INotificacionObserver> observers;
 
     private GestorEventos() {
         eventos = new ArrayList<>();
         compras = new ArrayList<>();
         recintos = new ArrayList<>();
+        incidencias = new ArrayList<>();
         observers = new ArrayList<>();
     }
     public static GestorEventos getInstance() {
@@ -234,6 +236,37 @@ public class GestorEventos {
         nuevoAsiento.setEstado(EstadoAsiento.VENDIDO);            // ocupar nuevo asiento
         entrada.setAsiento(nuevoAsiento);
         notificarObservers("Asiento reasignado en compra: " + idCompra);
+    }
+    public void registrarIncidencia(Incidencia incidencia) throws ProyectoException {
+        if (incidencia == null) throw new ProyectoException("La incidencia no puede ser nula.");
+        incidencias.add(incidencia);
+        notificarObservers("Nueva incidencia registrada: " + incidencia.getTipoIncidencia()
+                + " — " + incidencia.getEntidad().getEntidadAfectada());
+    }
+    public void actualizarIncidencia(Incidencia incidencia) throws ProyectoException {
+        Incidencia encontrada = buscarIncidenciaPorId(incidencia.getIdIncidencia())
+                .orElseThrow(() -> new ProyectoException("Incidencia no encontrada."));
+        incidencias.set(incidencias.indexOf(encontrada), incidencia);
+    }
+    public void eliminarIncidencia(String idIncidencia) throws ProyectoException {
+        Incidencia encontrada = buscarIncidenciaPorId(idIncidencia)
+                .orElseThrow(() -> new ProyectoException("Incidencia no encontrada."));
+        incidencias.remove(encontrada);
+    }
+    public List<Incidencia> listarIncidencias() {
+        return new ArrayList<>(incidencias);
+    }
+    public List<Incidencia> filtrarIncidencias(LocalDate desde, LocalDate hasta, String tipo) {
+        return incidencias.stream()
+                .filter(i -> desde == null || !i.getFecha().isBefore(desde))
+                .filter(i -> hasta == null || !i.getFecha().isAfter(hasta))
+                .filter(i -> tipo == null || i.getTipoIncidencia().equalsIgnoreCase(tipo))
+                .collect(Collectors.toList());
+    }
+    private Optional<Incidencia> buscarIncidenciaPorId(String idIncidencia) {
+        return incidencias.stream()
+                .filter(i -> i.getIdIncidencia().equals(idIncidencia))
+                .findFirst();
     }
     private Optional<Compra> buscarCompraPorId(String idCompra) {
         return compras.stream()
