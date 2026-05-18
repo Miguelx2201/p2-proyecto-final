@@ -402,4 +402,8 @@ public class GestorEventos {
                 .limit(top)
                 .collect(Collectors.toList());
     }
+    // Solo para pruebas
+    static void resetForTesting() {
+        instance = null;
+    }
 }

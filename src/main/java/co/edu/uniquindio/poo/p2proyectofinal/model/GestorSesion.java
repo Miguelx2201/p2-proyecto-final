@@ -76,4 +76,8 @@ public class GestorSesion{
     public boolean haySesionActiva() {
         return usuarioActual != null;
     }
+    // Solo para pruebas 
+    static void resetForTesting() {
+        instance = null;
+    }
 }
