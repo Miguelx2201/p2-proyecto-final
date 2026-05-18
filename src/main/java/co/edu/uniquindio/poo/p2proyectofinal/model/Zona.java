@@ -25,4 +25,10 @@ public class Zona {
         this.asientos = asientos;
         this.recinto = recinto;
     }
+    public double calcularPorcentajeOcupacion() {
+        long asientosOcupados = asientos.stream()
+                .filter(a -> a.getEstado() != EstadoAsiento.DISPONIBLE)
+                .count();
+        return (asientosOcupados * 100.0) / capacidad;
+    }
 }

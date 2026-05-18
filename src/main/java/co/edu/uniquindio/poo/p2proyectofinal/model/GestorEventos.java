@@ -98,11 +98,7 @@ public class GestorEventos {
         Map<String, Double> disponibilidad = new LinkedHashMap<>();
 
         for (Zona zona : evento.getRecinto().getZonas()) {
-            long asientosOcupados = zona.getAsientos().stream()
-                    .filter(a -> a.getEstado() != EstadoAsiento.DISPONIBLE)
-                    .count();
-            double porcentajeOcupacion = (asientosOcupados * 100.0) / zona.getCapacidad();
-            disponibilidad.put(zona.getNombre(), porcentajeOcupacion);
+            disponibilidad.put(zona.getNombre(), zona.calcularPorcentajeOcupacion());
         }
 
         return disponibilidad;
