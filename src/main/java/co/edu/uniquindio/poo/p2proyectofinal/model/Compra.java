@@ -9,7 +9,6 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Builder
 public class Compra implements IIncidencia{
     private static int numCompras=0;
     private final String idCompra;
@@ -30,7 +29,6 @@ public class Compra implements IIncidencia{
         this.usuario = usuario;
         this.evento = evento;
         this.entradas = entradas;
-        this.metodoPago=metodoPago;
         this.total = calcularTotalCompra();
     }
     private double calcularTotalCompra(){

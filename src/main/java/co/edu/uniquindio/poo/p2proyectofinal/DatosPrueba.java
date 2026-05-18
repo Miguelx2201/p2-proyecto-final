@@ -91,9 +91,7 @@ public class DatosPrueba {
         CompraFacade facade = new CompraFacade(vipFactory);
 
         List<Asiento> seleccion = List.of(asientosVip.get(0), asientosVip.get(1));
-        Compra compra1 = facade.iniciarCompra(zonaVip, seleccion, List.of("Seguro"));
-        compra1.setUsuario(cliente1);
-        compra1.setEvento(concierto);
+        Compra compra1 = facade.iniciarCompra(zonaVip, concierto, seleccion, List.of("Seguro"));
         facade.confirmarPago(compra1, new TarjetaPago("4111111111111111", "123"));
         gestor.realizarCompra(compra1);
 

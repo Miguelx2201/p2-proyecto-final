@@ -13,13 +13,11 @@ public class CompraFacade {
         this.reporteService = new ReporteService();
     }
 
-    public Compra iniciarCompra(Zona zona, List<Asiento> asientosSeleccionados, List<String> extras) {
+    public Compra iniciarCompra(Zona zona, Evento evento, List<Asiento> asientosSeleccionados, List<String> extras) {
         System.out.println("Procesando reserva de " + asientosSeleccionados.size() + " asientos...");
 
         List<IEntrada> entradasDecoradas = new ArrayList<>();
-        double totalAcumulado = 0;
         for (Asiento asiento : asientosSeleccionados) {
-            // Factory: Crear entrada base
             IEntrada entrada = entradaFactory.createEntrada(
                     zona,
                     asiento,
@@ -27,23 +25,12 @@ public class CompraFacade {
                     "Entrada " + zona.getNombre() + " - Asiento: " + asiento.getNumero(),
                     zona.getPrecioBase()
             );
-
             entrada = aplicarDecoradores(entrada, extras);
-
             entradasDecoradas.add(entrada);
-            totalAcumulado += entrada.getPrecioFinal();
-
             asiento.setEstado(EstadoAsiento.RESERVADO);
         }
-
-        Compra nuevaCompra = Compra.builder()
-                .fechaCreacion(LocalDate.now())
-                .total(totalAcumulado)
-                .estado(new CompraCreadaState())
-                .entradas(entradasDecoradas)
-                .build();
-
-        return nuevaCompra;
+        Usuario usuarioActual = GestorSesion.getInstance().getUsuarioActual();
+        return new Compra(LocalDate.now(), usuarioActual, evento, entradasDecoradas);
     }
 
     public void confirmarPago(Compra compra, IMetodoPago metodoPago) throws ProyectoException {
