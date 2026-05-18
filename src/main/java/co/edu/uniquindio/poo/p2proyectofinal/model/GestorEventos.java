@@ -346,4 +346,60 @@ public class GestorEventos {
         resultado = filtrarComprasPorEstado(resultado, estado);
         return resultado;
     }
+    // RF-018 — Ventas por periodo (para gráfico de líneas)
+    // Retorna un Map<fecha, totalVendido> para el eje X/Y del gráfico
+    public Map<LocalDate, Double> metricasVentasPorPeriodo(LocalDate desde, LocalDate hasta) {
+        return compras.stream()
+                .filter(c -> !c.getFechaCreacion().isBefore(desde) && !c.getFechaCreacion().isAfter(hasta))
+                .collect(Collectors.groupingBy(
+                        Compra::getFechaCreacion,
+                        Collectors.summingDouble(Compra::getTotal)
+                ));
+    }
+
+    // Ocupación por zona de un evento (para gráfico de barras)
+    // Retorna Map<nombreZona, porcentajeOcupacion>
+    public Map<String, Double> metricasOcupacionPorZona(String idEvento) throws ProyectoException {
+        return consultarDisponibilidadPorZonas(idEvento);
+    }
+
+    // Ingresos por servicios adicionales (para gráfico de pie)
+    // Retorna Map<nombreEvento, ingresoAdicional>
+    public Map<String, Double> metricasIngresosPorServiciosAdicionales() {
+        return compras.stream()
+                .collect(Collectors.groupingBy(
+                        c -> c.getEvento().getNombre(),
+                        Collectors.summingDouble(c -> c.getEntradas().stream()
+                                .mapToDouble(e -> e.getPrecioFinal() - e.getPrecioBase())
+                                .sum())
+                ));
+    }
+
+    // Tasa de cancelación (para gráfico de pie)
+    // Retorna Map<"Canceladas"/"Activas", cantidad>
+    public Map<String, Long> metricasTasaCancelacion() {
+        long canceladas = compras.stream()
+                .filter(c -> c.getEstado() instanceof CompraCanceladaState
+                        || c.getEstado() instanceof CompraReembolsadaState)
+                .count();
+        long activas = compras.size() - canceladas;
+        Map<String, Long> resultado = new LinkedHashMap<>();
+        resultado.put("Activas", activas);
+        resultado.put("Canceladas", canceladas);
+        return resultado;
+    }
+
+    // Top eventos por ventas (para gráfico de barras)
+    // Retorna lista ordenada de Map.Entry<nombreEvento, totalVentas>
+    public List<Map.Entry<String, Double>> metricasTopEventos(int top) {
+        Map<String, Double> ventasPorEvento = compras.stream()
+                .collect(Collectors.groupingBy(
+                        c -> c.getEvento().getNombre(),
+                        Collectors.summingDouble(Compra::getTotal)
+                ));
+        return ventasPorEvento.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .limit(top)
+                .collect(Collectors.toList());
+    }
 }
