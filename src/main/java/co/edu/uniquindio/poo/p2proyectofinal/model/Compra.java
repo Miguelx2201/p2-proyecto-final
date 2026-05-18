@@ -10,7 +10,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Builder
-public class Compra {
+public class Compra implements IIncidencia{
     private static int numCompras=0;
     private final String idCompra;
     private LocalDate fechaCreacion;
@@ -41,5 +41,10 @@ public class Compra {
     }
     public void cancelar() throws ProyectoException{
         estado.cancelar(this);
+    }
+
+    @Override
+    public String getEntidadAfectada() {
+        return "Compra: "+fechaCreacion+". ID: "+idCompra+". Cliente: "+usuario.getNombre();
     }
 }

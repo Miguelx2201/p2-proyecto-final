@@ -14,13 +14,15 @@ public class Incidencia {
     private String tipoIncidencia;
     private String descripcion;
     private LocalDate fecha;
+    private IIncidencia entidad;
 
-    public Incidencia(String tipoIncidencia, String descripcion, LocalDate fecha) {
+    public Incidencia(String tipoIncidencia, String descripcion, LocalDate fecha, IIncidencia entidad) {
         //Aqui se intenta simular una llave primaria como en una base de datos, se intenta que cumpla con
         // las caracteristicas de llave primaria, es decir, autoincrementable y no nula.
         this.idIncidencia = String.valueOf(++numIncidencias);
         this.tipoIncidencia = tipoIncidencia;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.entidad = entidad;
     }
 }

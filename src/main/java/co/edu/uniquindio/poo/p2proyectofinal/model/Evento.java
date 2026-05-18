@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Evento {
+public class Evento implements IIncidencia{
     private static int numEventos=0;
     private final String idEvento;
     private String nombre;
@@ -37,5 +37,10 @@ public class Evento {
         this.fechaHora = fechaHora;
         this.categoria = categoria;
         this.nombre = nombre;
+    }
+
+    @Override
+    public String getEntidadAfectada() {
+        return "Evento: "+nombre+". ID: "+idEvento;
     }
 }
