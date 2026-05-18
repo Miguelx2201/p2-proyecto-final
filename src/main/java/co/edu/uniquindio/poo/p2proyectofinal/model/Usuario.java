@@ -31,6 +31,7 @@ public class Usuario {
         this.contraseña = contraseña;
         this.rol = rol;
         this.metodosPago = metodosPago;
+        this.compras = new ArrayList<>();
     }
     public void agregarMetodoPago(IMetodoPago metodoPago) throws ProyectoException {
         if (metodoPago == null) throw new ProyectoException("El método de pago no puede ser nulo.");
