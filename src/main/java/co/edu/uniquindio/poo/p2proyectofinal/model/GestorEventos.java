@@ -14,11 +14,13 @@ public class GestorEventos {
 
     private List<Evento> eventos;
     private List<Compra> compras;
+    private List<Recinto> recintos;
     private List<INotificacionObserver> observers;
 
     private GestorEventos() {
         eventos = new ArrayList<>();
         compras = new ArrayList<>();
+        recintos = new ArrayList<>();
         observers = new ArrayList<>();
     }
     public static GestorEventos getInstance() {
@@ -94,6 +96,31 @@ public class GestorEventos {
     private Optional<Evento> buscarEventoPorId(String idEvento) { //mas rapido
         return eventos.stream()
                 .filter(e -> e.getIdEvento().equals(idEvento))
+                .findFirst();
+    }
+    public void agregarRecinto(Recinto recinto) throws ProyectoException {
+        if (recinto == null) throw new ProyectoException("No es posible añadir un recinto nulo.");
+        boolean yaExiste = recintos.stream()
+                .anyMatch(r -> r.getNombre().equalsIgnoreCase(recinto.getNombre()));
+        if (yaExiste) throw new ProyectoException("Ya existe un recinto con ese nombre.");
+        recintos.add(recinto);
+    }
+    public void actualizarRecinto(Recinto recinto) throws ProyectoException {
+        Recinto encontrado = buscarRecintoPorId(recinto.getIdRecinto())
+                .orElseThrow(() -> new ProyectoException("No se puede actualizar: el recinto no existe."));
+        recintos.set(recintos.indexOf(encontrado), recinto);
+    }
+    public void eliminarRecinto(String idRecinto) throws ProyectoException {
+        Recinto encontrado = buscarRecintoPorId(idRecinto)
+                .orElseThrow(() -> new ProyectoException("No se puede eliminar: el recinto no existe."));
+        recintos.remove(encontrado);
+    }
+    public List<Recinto> listarRecintos() {
+        return new ArrayList<>(recintos);
+    }
+    private Optional<Recinto> buscarRecintoPorId(String idRecinto) {
+        return recintos.stream()
+                .filter(r -> r.getIdRecinto().equals(idRecinto))
                 .findFirst();
     }
     //Compra. (aqui pueden faltar modificaciones para manejo del estado de la compra, etc.
