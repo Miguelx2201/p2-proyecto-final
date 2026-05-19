@@ -43,7 +43,7 @@ public class DatosPrueba {
         Zona zonaGral = new Zona("General", 48, 90000.0, asientosGral, null);
 
         Recinto estadio = new Recinto("Estadio Centenario", "Cra 1 #2-3",
-                "Armenia", new ArrayList<>(List.of(zonaVip, zonaPref, zonaGral)));
+                "Armenia", new ArrayList<>(List.of(zonaVip, zonaPref, zonaGral)), "/images/coliseo_del_cafe.JPG");
 
         // Asignar recinto a cada zona
         zonaVip.setRecinto(estadio);

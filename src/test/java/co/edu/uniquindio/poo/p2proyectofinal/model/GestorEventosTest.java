@@ -26,7 +26,7 @@ class GestorEventosTest {
         );
         zonaVip = new Zona("VIP", 2, 300000.0, new ArrayList<>(asientos), null);
         recinto = new Recinto("Estadio", "Cra 1", "Armenia",
-                new ArrayList<>(List.of(zonaVip)));
+                new ArrayList<>(List.of(zonaVip)), "/images/coliseo_del_cafe.JPG");
         zonaVip.setRecinto(recinto);
         gestor.agregarRecinto(recinto);
     }
